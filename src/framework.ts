@@ -15,25 +15,12 @@ const isName = (name:string) => !/^[0-9]/gm.test(name) && !name.includes(" ");
 const isString = (string:string) => string[0]==='\"' && string[string.length-1]==='\"';
 const isNum = (string:string) => Number(string).toString() === string;
 
-const getType = (line:string): allowedTypes => {
-	const word = line.split(" ")[0];
-	return isType(word) ? word : "unkown";
-};
+const getName = (line:string): string => line.split("=")[0].trim();
 
-const getName = (line:string): string => {
-	let name:string|string[] = line.split("=")[0].split(" ");
-	name.shift();
-	name = name.join(" ").trim();
-	return name;
-}
-
-const getValue = (line:string, type:"string"|"number") => {
-	if (type === "string"){
-		console.log(line.split("=")[1].trim());
-	}else{
-		console.log(line.split("=")[1].trim());
-	}
-	return 0;
+const getValue = (line:string) => {
+	let value = line.split("=")[1].trim();
+	return isString(value) ? value.substring(1, value.length-1) : 
+	isNum(value) ? Number(value): undefined;
 }
 
 const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
@@ -46,17 +33,9 @@ const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
 			if (variable !== ""){
 				let newVar:Variable = {type:"unkown", name:"", value:""}
 				
+				// syntax check
 				if (!variable.includes("=")){
 					console.log(`[ERROR] variable does not have "="\n${variable}`);
-				}
-
-				// get type
-				newVar.type = getType(variable);
-
-				// validate type
-				if (newVar.type === "unkown"){
-					console.log(`[ERROR] unknown type\n${variable}`);
-					continue;
 				}
 
 				// get name
@@ -68,15 +47,20 @@ const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
 					continue;
 				}
 
-				//get value
-				newVar.value = getValue(variable, newVar.type);
+				// get and validate value
+				let val = getValue(variable);
+				if (val === undefined){
+					console.log(`[ERROR] cannot infer value \n${variable}`);
+					continue;
+				}
+				newVar.value = val;
 
+				// get type
+				typeof newVar.value == "string" ? newVar.type = "string": newVar.type = "number";
+				
 				state.vars.push(newVar);
 			}
 		}
-		
-
-		//console.log(content);
 	}
 }
 
@@ -90,3 +74,4 @@ window.onload = () => {
 		console.log(variable);
 	}
 };
+// 106

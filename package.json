@@ -1,17 +1,16 @@
 {
   "name": "@luke_/neutronic",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "an easy to use light weight web framework",
   "main": "neutronic.ts",
   "scripts": {
-    "test": "test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/justlucdewit/neutronic.git"
   },
   "keywords": [
-    "lightweight", "framework", "neutronic",
+    "lightweight", "framework", "neutronic"
   ],
   "author": "luc de wit",
   "license": "ISC",
