@@ -27,6 +27,7 @@ const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
 	for (const varTag of vars){
 		let content = varTag.innerText.split(";");
 		varTag.remove()
+		let varsFound: Array<Variable> = [];
 
 		for (let variable of content){
 			variable = variable.trim();
@@ -58,7 +59,7 @@ const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
 				// get type
 				typeof newVar.value == "string" ? newVar.type = "string": newVar.type = "number";
 				
-				state.vars.push(newVar);
+				varsFound.push(newVar);
 			}
 		}
 	}

@@ -13,6 +13,7 @@ const parseVars = (vars) => {
     for (const varTag of vars) {
         let content = varTag.innerText.split(";");
         varTag.remove();
+        let varsFound = [];
         for (let variable of content) {
             variable = variable.trim();
             if (variable !== "") {
@@ -37,7 +38,7 @@ const parseVars = (vars) => {
                 newVar.value = val;
                 // get type
                 typeof newVar.value == "string" ? newVar.type = "string" : newVar.type = "number";
-                state.vars.push(newVar);
+                varsFound.push(newVar);
             }
         }
     }
