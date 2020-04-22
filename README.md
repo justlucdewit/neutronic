@@ -22,9 +22,9 @@ neutronic.init();
 <html>
 	<body>
 		<vars><!--This is a neutronic tag used for creating variables-->
-			string firstName = "elon";
-			string lastName = "musk";
-			number age = 48; 
+			firstName = "elon";
+			lastName = "musk";
+			age = 48; 
 		</vars>
 
 		<h1>
