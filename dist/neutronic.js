@@ -10,10 +10,10 @@ const getValue = (line) => {
         isNum(value) ? Number(value) : undefined;
 };
 const parseVars = (vars) => {
+    let varsFound = [];
     for (const varTag of vars) {
         let content = varTag.innerText.split(";");
         varTag.remove();
-        let varsFound = [];
         for (let variable of content) {
             variable = variable.trim();
             if (variable !== "") {
@@ -42,12 +42,37 @@ const parseVars = (vars) => {
             }
         }
     }
+    return varsFound;
+};
+const identifyMustaches = () => {
+    let content = document.body.innerHTML;
+    console.log(content);
+    let inMustache = false;
+    let varname = "";
+    let indexFound = 0;
+    for (let char = 0; char < content.length - 1; char++) {
+        if (!inMustache && content[char] === '{' && content[char + 1] === '{') {
+            char++;
+            indexFound = char;
+            inMustache = true;
+        }
+        else if (inMustache && content[char] === '}' && content[char + 1] === '}') {
+            inMustache = false;
+            content = content.slice(0, indexFound - 1) + `<span class="neutronic-variable neutronic-${varname.trim()}"></span>` + content.slice(indexFound + varname.length + 3);
+            varname = "";
+        }
+        else if (inMustache) {
+            varname += content[char];
+        }
+    }
+    document.body.innerHTML = content;
 };
 let state = {
-    vars: []
+    vars: [],
 };
 window.onload = () => {
-    parseVars(document.getElementsByTagName("vars"));
+    state.vars = parseVars(document.getElementsByTagName("vars"));
+    identifyMustaches();
     for (const variable of state.vars) {
         console.log(variable);
     }
