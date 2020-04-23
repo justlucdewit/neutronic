@@ -108,6 +108,7 @@ let state:State = {
 	vars: [],
 };
 
+
 window.onload = () => {
 	state.vars = parseVars(document.getElementsByTagName("vars") as HTMLCollectionOf<HTMLElement>);
 	identifyMustaches();

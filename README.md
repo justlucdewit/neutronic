@@ -7,12 +7,9 @@ npm i @luke_/neutronic
 ```
 
 ## Usage
-- First include neutronic using JavaScript
-- Then call the init function
-```js
-import neutronic from 'neutronic'
-neutronic.init();
-```
+- first install neutronic like descibed above^
+- put this script tag in your header: `<script type="text/javascript" src="node_modules/@luke_/neutronic/neutronic.js"></script>`
+- start using neutronic's features
 
 #### Neutronic will now parse all the special neutronic HTML tags and do what it is supposed to do.
 

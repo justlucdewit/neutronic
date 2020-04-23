@@ -1,6 +1,6 @@
 {
   "name": "@luke_/neutronic",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "an easy to use light weight web framework",
   "main": "neutronic.js",
   "scripts": {
