@@ -36,7 +36,7 @@ const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
 				
 				// syntax check
 				if (!variable.includes("=")){
-					console.error(`[ERROR] variable does not have "="\n${variable}`);
+					console.error(`[NEUTRONIC ERROR] Variable does not have "="\n${variable}`);
 				}
 
 				// get name
@@ -44,14 +44,14 @@ const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
 
 				// validate name
 				if (!isName(newVar.name)){
-					console.error(`[ERROR] illegal variable name "${newVar.name}"\n${variable}`);
+					console.error(`[NEUTRONIC ERROR] Illegal variable name "${newVar.name}"\n${variable}`);
 					continue;
 				}
 
 				// get and validate value
 				let val = getValue(variable);
 				if (val === undefined){
-					console.error(`[ERROR] cannot infer value \n${variable}`);
+					console.error(`[NEUTRONIC ERROR] cannot infer value \n${variable}`);
 					continue;
 				}
 				newVar.value = val;
@@ -97,19 +97,48 @@ const updateAllMustaches = () => {
 			className = className.substring(15);
 			let variable = state.vars.find(value => value.name === className);
 			if (variable !== undefined){
-
 				mustache.innerHTML = variable.value as string;
 			}
 		}
 	}
 };
 
+const retrieveData = async (url:string) => {
+	let response = await fetch(url);
+	if (response.status !== 200){
+		return undefined;
+	}
+	return await response.text();
+};
+
+const loadImports = async () => {
+	const importTags = document.getElementsByTagName("import");
+	for (const importTag of importTags){
+		let pathAttr = Array.from(importTag.attributes).find(attr => attr.name == "src");
+
+		if (pathAttr === undefined){
+			console.error(`[NEUTRONIC ERROR] import tag without src`);
+			continue;
+		}
+
+		let data = await retrieveData(`http://localhost:5000/testing/${pathAttr.value}`);
+		if (data === undefined){
+			console.error(`[NEUTRONIC ERROR] cannot find or open import: "${pathAttr.value}"`);
+			continue;
+		}
+		importTag.innerHTML = data;
+
+		console.log(importTag.innerHTML)
+	}
+}
+
 let state:State = {
 	vars: [],
 };
 
 
-window.onload = () => {
+window.onload = async () => {
+	await loadImports();
 	state.vars = parseVars(document.getElementsByTagName("vars") as HTMLCollectionOf<HTMLElement>);
 	identifyMustaches();
 	updateAllMustaches();
