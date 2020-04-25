@@ -26,7 +26,8 @@ const getValue = (line:string) => {
 const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
 	let varsFound: Array<Variable> = [];
 	for (const varTag of vars){
-		let content = varTag.innerText.split(";");
+		let content = varTag.innerHTML.split(";");
+
 		varTag.remove()
 		
 		for (let variable of content){
@@ -54,10 +55,10 @@ const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
 					console.error(`[NEUTRONIC ERROR] cannot infer value \n${variable}`);
 					continue;
 				}
-				newVar.value = val;
+				newVar.value = val; 
 
 				// get type
-				typeof newVar.value == "string" ? newVar.type = "string": newVar.type = "number";
+				newVar.type = typeof newVar.value == "string"? "string" : "number";
 				
 				varsFound.push(newVar);
 			}
@@ -112,7 +113,7 @@ const retrieveData = async (url:string) => {
 };
 
 const loadImports = async () => {
-	const importTags = document.getElementsByTagName("import");
+	const importTags = document.getElementsByTagName("import") as HTMLCollectionOf<HTMLElement>;
 	for (const importTag of importTags){
 		let pathAttr = Array.from(importTag.attributes).find(attr => attr.name == "src");
 
@@ -127,10 +128,13 @@ const loadImports = async () => {
 			continue;
 		}
 		importTag.innerHTML = data;
-
-		console.log(importTag.innerHTML)
 	}
 }
+
+const setupModels = () => {
+	let inputs = document.getElementsByClassName("input");
+	console.log(inputs);
+};
 
 let state:State = {
 	vars: [],
@@ -138,8 +142,10 @@ let state:State = {
 
 
 window.onload = async () => {
+	document.body.style.visibility = "hidden";
 	await loadImports();
 	state.vars = parseVars(document.getElementsByTagName("vars") as HTMLCollectionOf<HTMLElement>);
 	identifyMustaches();
 	updateAllMustaches();
+	document.body.style.visibility = "visible"
 };
