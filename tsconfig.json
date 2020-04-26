@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES2020",
+        "target": "es3",
         "module": "commonjs",
         "outDir": "./dist",
         "strict": true,
@@ -8,7 +8,9 @@
         "noImplicitAny": true,
         "noImplicitThis": true,
         "moduleResolution": "node",
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "lib": ["es5", "DOM", "DOM.Iterable"],
+        "downlevelIteration": true
     },
     "include": ["src"],
     "exclude": ["node_modules"]

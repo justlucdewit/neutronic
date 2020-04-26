@@ -23,8 +23,9 @@ const getValue = (line:string) => {
 	isNum(value) ? Number(value): undefined;
 }
 
-const parseVars = (vars:HTMLCollectionOf<HTMLElement>) => {
+const parseVars = (ivars:HTMLCollectionOf<HTMLElement>) => {
 	let varsFound: Array<Variable> = [];
+	let vars = Array.from(ivars);
 	for (const varTag of vars){
 		let content = varTag.innerHTML.split(";");
 
@@ -140,8 +141,10 @@ let state:State = {
 	vars: [],
 };
 
+console.info("[NEUTRONIC INFO] loaded neutronic");
 
 window.onload = async () => {
+	console.info("[NEUTRONIC INFO] initializing neutronic");
 	document.body.style.visibility = "hidden";
 	await loadImports();
 	state.vars = parseVars(document.getElementsByTagName("vars") as HTMLCollectionOf<HTMLElement>);
