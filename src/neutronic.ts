@@ -132,9 +132,31 @@ const loadImports = async () => {
 	}
 }
 
-const setupModels = () => {
-	let inputs = document.getElementsByClassName("input");
-	console.log(inputs);
+const setupBinds = () => {
+	let inputs = document.getElementsByTagName("input");
+
+	for (const el of inputs){
+		el.onkeyup = (e) => {
+			if (e !== undefined && e.target !== null){
+				//console.log(e);
+				const element = e.target as HTMLInputElement;
+				const text = element.value;
+				let target = Array.from(element.attributes).find(attr => attr.name=="bind");
+				if (target === undefined){
+					return;
+				}
+				for (const variable of state.vars){
+					if (variable.name === target.value){
+						variable.value = element.value;
+						console.log(variable.value)
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	console.log(inputs[0]);
 };
 
 let state:State = {
@@ -150,5 +172,6 @@ window.onload = async () => {
 	state.vars = parseVars(document.getElementsByTagName("vars") as HTMLCollectionOf<HTMLElement>);
 	identifyMustaches();
 	updateAllMustaches();
+	setupBinds();
 	document.body.style.visibility = "visible"
 };
