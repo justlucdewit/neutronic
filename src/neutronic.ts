@@ -105,6 +105,13 @@ const updateAllMustaches = () => {
 	}
 };
 
+const updateSingleMustache = (name:string) => {
+	const mustaches = document.getElementsByClassName(`neutronic-bind-${name}`);
+	for (const m of mustaches){
+		// m.innerHTML = 
+	}
+}
+
 const retrieveData = async (url:string) => {
 	let response = await fetch(url);
 	if (response.status !== 200){
