@@ -105,10 +105,13 @@ const updateAllMustaches = () => {
 	}
 };
 
-const updateSingleMustache = (name:string) => {
+const updateMustache = (name:string) => {
 	const mustaches = document.getElementsByClassName(`neutronic-bind-${name}`);
 	for (const m of mustaches){
-		// m.innerHTML = 
+		let variable = state.vars.find(value => value.name === name);
+		if (variable !== undefined){
+			m.innerHTML = String(variable.value);
+		}
 	}
 }
 
@@ -145,7 +148,6 @@ const setupBinds = () => {
 	for (const el of inputs){
 		el.onkeyup = (e) => {
 			if (e !== undefined && e.target !== null){
-				//console.log(e);
 				const element = e.target as HTMLInputElement;
 				const text = element.value;
 				let target = Array.from(element.attributes).find(attr => attr.name=="bind");
@@ -155,10 +157,11 @@ const setupBinds = () => {
 				for (const variable of state.vars){
 					if (variable.name === target.value){
 						variable.value = element.value;
-						console.log(variable.value)
+						//console.log(variable.value)
 						break;
 					}
 				}
+				updateMustache(target.value);
 			}
 		}
 	}
