@@ -157,7 +157,6 @@ const setupBinds = () => {
 				for (const variable of state.vars){
 					if (variable.name === target.value){
 						variable.value = element.value;
-						//console.log(variable.value)
 						break;
 					}
 				}
@@ -165,9 +164,31 @@ const setupBinds = () => {
 			}
 		}
 	}
-
-	console.log(inputs[0]);
 };
+
+const setupEvents = () => {
+	const eventElements = document.getElementsByTagName("event");
+	for (const tag of eventElements){
+		let typeAttr = Array.from(tag.attributes).find(attr => attr.name == "type");
+		let doAttr = Array.from(tag.attributes).find(attr => attr.name == "do");
+		if (doAttr === undefined || typeAttr === undefined){
+			console.error(`[NEUTRONIC ERROR] event tag without type and/or do attribute\n`, tag);
+			continue;
+		}
+		switch(typeAttr.value){
+			case "click": {
+				break;
+			}
+			case "hover": {
+				break;
+			}
+			default: {
+				console.error(`[NEUTRONIC ERROR] event tag without unknown type attribute\n`, tag);
+				continue;
+			}
+		}
+	}
+}
 
 let state:State = {
 	vars: [],
@@ -183,5 +204,6 @@ window.onload = async () => {
 	identifyMustaches();
 	updateAllMustaches();
 	setupBinds();
+	setupEvents();
 	document.body.style.visibility = "visible"
 };
