@@ -177,6 +177,9 @@ const setupEvents = () => {
 		}
 		switch(typeAttr.value){
 			case "click": {
+				tag.addEventListener("click", () => {
+					console.log("clicked");
+				});
 				break;
 			}
 			case "hover": {
