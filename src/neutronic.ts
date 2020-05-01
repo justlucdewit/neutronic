@@ -14,6 +14,7 @@ const isType = (value:string): value is allowedTypes => value === "string" || va
 const isName = (name:string) => !/^[0-9]/gm.test(name) && !name.includes(" ");
 const isString = (string:string) => string[0]==='\"' && string[string.length-1]==='\"';
 const isNum = (string:string) => Number(string).toString() === string;
+const isEvent = (string:string) => ["click", "pointermove"].includes(string);
 
 const getName = (line:string): string => line.split("=")[0].trim();
 
@@ -175,21 +176,15 @@ const setupEvents = () => {
 			console.error(`[NEUTRONIC ERROR] event tag without type and/or do attribute\n`, tag);
 			continue;
 		}
-		switch(typeAttr.value){
-			case "click": {
-				tag.addEventListener("click", () => {
-					console.log("clicked");
-				});
-				break;
-			}
-			case "hover": {
-				break;
-			}
-			default: {
-				console.error(`[NEUTRONIC ERROR] event tag without unknown type attribute\n`, tag);
+
+		if(isEvent(typeAttr.value)){
+			tag.addEventListener(typeAttr.value, () => {
+					console.log("triggered");
+			});
+		}else{
+			console.error(`[NEUTRONIC ERROR] event tag without unknown type attribute\n`, tag);
 				continue;
-			}
-		}
+		}		
 	}
 }
 
