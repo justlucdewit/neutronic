@@ -179,11 +179,10 @@ const setupEvents = () => {
 
 		if(isEvent(typeAttr.value)){
 			tag.addEventListener(typeAttr.value, () => {
-					console.log("triggered");
+				//console.log("triggered");
 			});
 		}else{
 			console.error(`[NEUTRONIC ERROR] event tag without unknown type attribute\n`, tag);
-				continue;
 		}		
 	}
 }
