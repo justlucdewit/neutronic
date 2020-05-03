@@ -1,13 +1,19 @@
 type allowedTypes = "string"|"number"|"unkown";
 
 interface Variable{
-	name: string,
-	type: allowedTypes,
+	name:string,
+	type:allowedTypes,
 	value:string|number
+}
+
+interface Action{
+	name:string,
+	code:string
 }
 
 interface State{
 	vars:Array<Variable>,
+	actions:Array<Action>
 }
 
 const isType = (value:string): value is allowedTypes => value === "string" || value === "number";
@@ -179,7 +185,7 @@ const setupEvents = () => {
 
 		if(isEvent(typeAttr.value)){
 			tag.addEventListener(typeAttr.value, () => {
-				//console.log("triggered");
+				console.log("triggered");
 			});
 		}else{
 			console.error(`[NEUTRONIC ERROR] event tag without unknown type attribute\n`, tag);
@@ -187,8 +193,21 @@ const setupEvents = () => {
 	}
 }
 
+const getActions = () => {
+	const actionElements = document.getElementsByTagName("action");
+	for (const actionEl of actionElements){
+		actionEl.remove();
+		const actionCode = actionEl.innerHTML;
+		const actionName = actionEl.attributes.getNamedItem("name");
+		if (actionName !== null){
+			state.actions.push({"name":actionName.value, "code":actionCode});
+		}
+	}
+};
+
 let state:State = {
 	vars: [],
+	actions: [],
 };
 
 console.info("[NEUTRONIC INFO] loaded neutronic");
@@ -198,6 +217,7 @@ window.onload = async () => {
 	document.body.style.visibility = "hidden";
 	await loadImports();
 	state.vars = parseVars(document.getElementsByTagName("vars") as HTMLCollectionOf<HTMLElement>);
+	getActions();
 	identifyMustaches();
 	updateAllMustaches();
 	setupBinds();
